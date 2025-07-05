@@ -1,0 +1,69 @@
+curl -s 'https://www.buscalibre.com.mx/libro-crimen-y-castigo/9786073135436/p/46981579' | grep -Eo '<strong class="precio">\$[[:space:]]*[0-9,]+\.[0-9]+' | sed -E 's/.*\$[[:space:]]*//'
+git commit --amend --author "lgutierrezramirez <lgutierrezramirez@switchfly.com>" -m 'id:SS-49536 PROD Send Payment Reminder Email task failing - wrong SQL date parameter\ndescription:These changes fixes a cast type Postgres DB issue when trying to get the customers that require a reminder\nreviewers:krey,agarcia,klizarraga'
+git commit --amend --author "lgutierrezramirez <lgutierrezramirez@switchfly.com>" -m 'id:SS-49536 PROD Send Payment Reminder Email task failing - wrong SQL date parameter\ndescription:These changes fixes a cast type Postgres DB issue when trying to get the customers that require a reminder / fix unit test\nreviewers:krey,agarcia,klizarraga'
+forge
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test testSetMessage
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge clean
+forge test
+forge build
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge test
+forge coverage
+forge test
+forge test
+forge test
+forge test
+history | fgrep -i forge
+hst | fgrep forge
+hst | grep -E 'forge|cast|chisel' >> ~/dev/solidity/foundry/cmds.txt
