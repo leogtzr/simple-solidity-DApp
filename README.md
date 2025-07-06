@@ -266,3 +266,10 @@ Una DApp fullstack de ejemplo para interactuar con un contrato inteligente Solid
 ## Licencia
 
 MIT
+
+
+## Archivo cmds.txt
+
+Ya que hacer deploy de la aplicación lleva muchísimos pasos, he condensado los pasos en este archivo, es decir, es el historial completo que he utilizado para manejar
+esta aplicación, es un archivo útil, sin embargo, contiene también typos y errores en el uso de algunos comandos, el programador tendrá que probar y filtrar lo que está
+mal de lo que está bien.
