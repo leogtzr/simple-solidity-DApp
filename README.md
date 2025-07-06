@@ -1,45 +1,268 @@
-Simple DApp using Solidity (React (Next.js)) deployed to Forge
+# SimpleSolidity DApp
 
-## TBD
-TBD
+Una DApp fullstack de ejemplo para interactuar con un contrato inteligente Solidity, desarrollada con Next.js, Foundry y wagmi/viem. Permite publicar un mensaje, recibir likes/dislikes y donaciones, y cuenta con un dashboard de administración para guardar un mensaje.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+---
 
-## Getting Started
+## Tabla de Contenidos
 
-First, run the development server:
+* [Estructura del Proyecto](#estructura-del-proyecto)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+* [Requisitos](#requisitos)
+
+* [Setup del Proyecto](#setup-del-proyecto)
+
+* [Compilación y Testing de Smart Contracts](#compilacion-y-testing-de-smart-contracts)
+
+* [Deployment del Smart Contract](#deployment-del-smart-contract)
+
+* [Frontend: Correr la DApp](#frontend-correr-la-dapp)
+
+* [Uso de la DApp](#uso-de-la-dapp)
+
+* [Comandos Útiles y Misceláneo](#comandos-utiles-y-miscelaneo)
+
+* [Licencia](#licencia)
+
+---
+
+## Estructura del Proyecto
+
+```
+.
+├── cmds.txt
+├── eslint.config.mjs
+├── LICENSE
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public/
+├── README.md
+├── SimpleSolidityABI.json
+├── SmartContracts/
+│   ├── script/
+│   │   └── SimpleSolidity.s.sol
+│   ├── SimpleSolidity.sol
+│   └── test/
+│       └── SimpleSolidity.t.sol
+├── src/
+│   ├── pages/
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   ├── admin-dashboard.tsx
+│   │   └── index.tsx
+│   └── styles/
+│       └── globals.css
+└── tsconfig.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Requisitos
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+* [Node.js](https://nodejs.org/) >= 18
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+* [Foundry](https://book.getfoundry.sh/getting-started/installation) (`forge`, `cast`, `anvil`)
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* [pnpm](https://pnpm.io/) o [npm](https://www.npmjs.com/)
 
-## Learn More
+* [MetaMask](https://metamask.io/) (para interactuar con la DApp)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+## Setup del Proyecto
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clona el repositorio y entra al directorio:**
 
-## Deploy on Vercel
+  ```sh
+  git clone <repo-url>
+  cd simple-solidity-DApp
+  ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Instala dependencias del frontend:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+  ```sh
+  pnpm install
+  # o
+  npm install
+  ```
+
+3. **Instala dependencias de los smart contracts:**
+
+  ```sh
+  cd SmartContracts
+  forge install OpenZeppelin/openzeppelin-contracts
+  cd ..
+  ```
+
+---
+
+## Compilación y Testing de Smart Contracts
+
+1. **Compilar contratos:**
+
+  ```sh
+  cd SmartContracts
+  forge build
+  ```
+
+2. **Correr los tests:**
+
+  ```sh
+  forge test
+  ```
+
+  Puedes correr un test específico:
+
+  ```sh
+  forge test --match-test testSetMessage
+  ```
+
+---
+
+## Deployment del Smart Contract
+
+### Opción 1: Deploy usando Script (recomendado)
+
+1. **Configura tu variable de entorno con la private key:**
+
+  * Crea un archivo `.env` en la raíz de `SmartContracts`:
+
+    ```sh
+    echo 'PRIVATE_KEY=tu_private_key' > .env
+    ```
+
+  * O exporta la variable en tu terminal:
+
+    ```sh
+    export PRIVATE_KEY=tu_private_key
+    ```
+
+2. **Inicia Anvil (red local):**
+
+  ```sh
+  anvil
+  ```
+
+3. **Haz deploy con el script:**
+
+  ```sh
+  cd SmartContracts
+  forge script script/SimpleSolidity.s.sol --broadcast --rpc-url http://localhost:8545
+  ```
+
+  * La dirección del contrato aparecerá en la salida del comando.
+
+### Opción 2: Deploy directo con `forge create`
+
+1. **Inicia Anvil si no lo has hecho:**
+
+  ```sh
+  anvil
+  ```
+
+2. **Haz deploy directo:**
+
+  ```sh
+  cd SmartContracts
+  forge create src/SimpleSolidity.sol:SimpleSolidity --unlocked --from 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --broadcast
+  ```
+
+  * Usa una de las cuentas que te da Anvil.
+
+  * La dirección del contrato aparecerá en la salida.
+
+### Obtener el ABI para el frontend
+
+1. **Después de compilar, copia el ABI:**
+
+  ```sh
+  jq '.abi' out/SimpleSolidity.sol/SimpleSolidity.json > ../../SimpleSolidityABI.json
+  ```
+
+  * O abre el archivo en `out/SimpleSolidity.sol/SimpleSolidity.json` y copia el elemento `abi` manualmente.
+
+---
+
+## Frontend: Correr la DApp
+
+1. **Regresa a la raíz del proyecto:**
+
+  ```sh
+  cd ../
+  ```
+
+2. **Configura la dirección del contrato en el frontend:**
+
+  * Edita el archivo `src/pages/index.tsx` y `src/pages/admin-dashboard.tsx` para poner la dirección correcta del contrato.
+
+3. **Inicia el servidor de desarrollo:**
+
+  ```sh
+  pnpm dev
+  # o
+  npm run dev
+  ```
+
+4. **Abre la DApp en tu navegador:**
+
+  * [http://localhost:3000](http://localhost:3000)
+
+---
+
+## Uso de la DApp
+
+* **Página principal:**
+
+  * Muestra el mensaje actual, likes, dislikes y permite donar ETH.
+
+  * Puedes dar like/dislike y ver los cambios en tiempo real.
+
+* **Admin Dashboard:**
+
+  * Solo el owner puede cambiar el mensaje del contrato.
+
+  * Requiere estar conectado con la cuenta owner y en la red local (Anvil).
+
+---
+
+## Comandos Útiles y Misceláneo
+
+* **Ver el ABI del contrato:**
+
+  ```sh
+  forge inspect SimpleSolidity abi
+  ```
+
+* **Llamar funciones del contrato desde la terminal:**
+
+  ```sh
+  cast call <direccion> "likesCount()"
+  cast send <direccion> "like()" --unlocked --from <cuenta>
+  ```
+
+* **Ver logs de eventos:**
+
+  ```sh
+  cast logs --from-block latest --to-block latest --rpc-url http://localhost:8545
+  ```
+
+* **Ver el código de un contrato:**
+
+  ```sh
+  cast code <direccion>
+  ```
+
+* **Limpiar y recompilar:**
+
+  ```sh
+  forge clean && forge build
+  ```
+
+---
+
+## Licencia
+
+MIT
